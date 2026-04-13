@@ -1,32 +1,42 @@
+import java.util.HashSet;
+import java.util.Set;
+
 /******************************************************************************
-
- Write a program to find the first element that repeats in an integer array.
-
- Input : {2, 6, 8, 3, 6, 3, 8}
- Output: 6
- *******************************************************************************/
-
+ * Q02. Find the first element that repeats in an integer array.
+ *
+ * Example:
+ *   Input : {2, 6, 8, 3, 6, 3, 8}
+ *   Output: 6
+ *
+ * Approach : Use a HashSet.  For each element, check membership before adding.
+ *            The first element already in the set is the answer.
+ *
+ * Complexity: Time O(n)  |  Space O(n)
+ * Difficulty: Easy
+ ******************************************************************************/
 public class FindFirstRepeatingNumber {
 
-    public static boolean isRepeating(int[] inputArray, int targetNum) {
-        int count = 0;
-        for (int i : inputArray) {
-            if (i == targetNum) {
-                count++;
-                if (count > 1) return true;
-            }
+    /**
+     * Returns the first repeating element, or {@code -1} if none exists.
+     *
+     * @param arr the input integer array
+     * @return first repeating integer
+     */
+    public static int findFirstRepeating(int[] arr) {
+        Set<Integer> seen = new HashSet<>();
+        for (int num : arr) {
+            if (!seen.add(num)) return num;
         }
-        return false;
+        return -1;
     }
 
     public static void main(String[] args) {
         int[] input = {2, 6, 8, 3, 6, 3, 8};
-        for (int num : input) {
-            if (isRepeating(input, num)) {
-                System.out.println("The first element that repeats is: " + num);
-                break;
-            }
+        int result = findFirstRepeating(input);
+        if (result != -1) {
+            System.out.println("First repeating element: " + result); // 6
+        } else {
+            System.out.println("No repeating element found.");
         }
     }
-
 }
