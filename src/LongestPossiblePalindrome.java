@@ -1,46 +1,45 @@
 import java.util.HashMap;
+import java.util.Map;
 
 /******************************************************************************
-
- Write a program to find the length of longest possible palindrome from a given string.
-
- Input : abchellocab
- Output: 9, abclolcba
- *******************************************************************************/
-
+ * Q06. Find the length of the longest palindrome that can be BUILT from the
+ *      characters of a given string (characters may be rearranged).
+ *
+ * Example:
+ *   Input : "abchellocab"
+ *   Output: length = 9  (e.g. "abclolcba")
+ *
+ * Approach : Count character frequencies.  All even-count characters can be
+ *            fully used.  At most one odd-count character sits in the middle.
+ *
+ * Complexity: Time O(n)  |  Space O(k)  where k = alphabet size
+ * Difficulty: Easy
+ ******************************************************************************/
 public class LongestPossiblePalindrome {
 
-    public static HashMap<Character, Integer> numberOfOccurrences(String input) {
-        HashMap<Character, Integer> map = new HashMap<>();
-        for (Character ch : input.toCharArray()) {
-            if (map.containsKey(ch)) {
-                map.put(ch, map.get(ch) + 1);
-            } else {
-                map.put(ch, 1);
-            }
+    /**
+     * Returns the maximum length palindrome constructable from {@code input}.
+     *
+     * @param input the source string
+     * @return maximum palindrome length
+     */
+    public static int longestPalindromeLength(String input) {
+        Map<Character, Integer> freq = new HashMap<>();
+        for (char ch : input.toCharArray()) {
+            freq.merge(ch, 1, Integer::sum);
         }
-        return map;
-    }
-
-    public static void createPalindrome(String input) {
-        HashMap<Character, Integer> map = numberOfOccurrences(input);
-        String mid = "";
-        StringBuilder sb = new StringBuilder();
-        for (Character key : map.keySet()) {
-            if (map.get(key) == 1) {
-                mid = String.valueOf(key);
-            }
-            sb.append(String.valueOf(key).repeat(map.get(key) / 2));
+        int length   = 0;
+        boolean odd  = false;
+        for (int count : freq.values()) {
+            length += (count / 2) * 2;
+            if (count % 2 == 1) odd = true;
         }
-        String palindrome = sb.toString();
-        palindrome += mid + sb.reverse().toString();
-        System.out.println("Longest possible palindrome is : " + palindrome);
-        System.out.println("Length of longest possible palindrome is : " + palindrome.length());
+        return odd ? length + 1 : length;
     }
 
     public static void main(String[] args) {
-        String input = "abchellocab";
-        createPalindrome(input);
+        System.out.println(longestPalindromeLength("abchellocab")); // 9
+        System.out.println(longestPalindromeLength("aabbcc"));      // 6
+        System.out.println(longestPalindromeLength("a"));           // 1
     }
-
 }

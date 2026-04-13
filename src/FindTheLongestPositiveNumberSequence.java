@@ -1,34 +1,48 @@
-import java.util.ArrayList;
+import java.util.Arrays;
 
 /******************************************************************************
-
- Write a program to find the longest sequence of positive numbers in a given array.
- Input : {9, 12, -1, 3, 4, -9, 23, 45,21,-87, 12345, 987, -31, 10}
- Output: {23,45,21}
- *******************************************************************************/
-
+ * Q04. Find the longest contiguous sequence of positive numbers in an array.
+ *
+ * Example:
+ *   Input : {9, 12, -1, 3, 4, -9, 23, 45, 21, -87, 12345, 987, -31, 10}
+ *   Output: [23, 45, 21]  (length 3)
+ *
+ * Approach : Single pass — maintain a current window and track the best.
+ *
+ * Complexity: Time O(n)  |  Space O(n)
+ * Difficulty: Easy
+ ******************************************************************************/
 public class FindTheLongestPositiveNumberSequence {
 
-    public static void longestPositiveSequence(int[] inputArray) {
-        ArrayList<Integer> temp = new ArrayList<>();
-        ArrayList<Integer> output = new ArrayList<>();
-        for (int num : inputArray) {
-            if (num > 0) {
-                temp.add(num);
-            } else {
-                if (temp.size() > output.size()) {
-                    output.clear();
-                    output.addAll(temp);
+    /**
+     * Returns the longest contiguous sub-array of positive integers.
+     *
+     * @param arr the input array
+     * @return sub-array with the most consecutive positive numbers
+     */
+    public static int[] longestPositiveSequence(int[] arr) {
+        int bestStart = 0, bestLen = 0;
+        int curStart  = 0, curLen  = 0;
+
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i] > 0) {
+                curLen++;
+                if (curLen > bestLen) {
+                    bestLen   = curLen;
+                    bestStart = curStart;
                 }
-                temp.clear();
+            } else {
+                curStart = i + 1;
+                curLen   = 0;
             }
         }
-
-        System.out.println("The longest positive sequence is : " + output.toString());
+        return Arrays.copyOfRange(arr, bestStart, bestStart + bestLen);
     }
 
     public static void main(String[] args) {
-        int[] input = {9, 12, -1, 3, 4, -9, 23, 45, 21, -87, 12345, 987, -31, 10};
-        longestPositiveSequence(input);
+        int[] input  = {9, 12, -1, 3, 4, -9, 23, 45, 21, -87, 12345, 987, -31, 10};
+        int[] result = longestPositiveSequence(input);
+        System.out.println("Longest positive sequence: " + Arrays.toString(result));
+        // [23, 45, 21]
     }
 }
